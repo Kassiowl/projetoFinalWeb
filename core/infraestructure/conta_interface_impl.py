@@ -15,10 +15,14 @@ class AtividadeContaImpl(ContaInterface):
                          conta_corrente_destino INTEGER, observacao TEXT, FOREIGN KEY(conta_corrente_origem) \
                          REFERENCES contaCorrente(numero), FOREIGN KEY(conta_corrente_destino) REFERENCES contaCorrente(numero))")
         
-        self.cur.execute("CREATE TABLE contaCorrente(numero INTEGER PRIMARY KEY, nome TEXT, data_abertura DATE, saldo REAL)")
+        self.cur.execute("CREATE TABLE contaCorrente(numero INTEGER PRIMARY KEY, nome TEXT, data_abertura DATE, saldo REAL, senha TEXT)")
 
         self.cur.execute("CREATE TABLE usuario(email TEXT, pessoa TEXT, FOREIGN KEY(pessoa) REFERENCES pessoa(cpf))")
         self.con.commit()
+
+    def __del__(self):
+        self.con.close()
+
 
     def cadastrar_conta_corrente(self, conta_corrente: ContaCorrente):
         conta_corrente_numero = conta_corrente.numero
@@ -65,3 +69,13 @@ class AtividadeContaImpl(ContaInterface):
             return True
         except:
             return False
+        
+    def logar(self, usuario: Usuario,senha):
+        query = f"SELECT login, password FROM user WHERE email = '{usuario.email} AND password = '{senha}'"
+        self.cur.execute(query)
+        user = self.cur.fetchone()
+        if user:
+            return True
+        
+        return False
+

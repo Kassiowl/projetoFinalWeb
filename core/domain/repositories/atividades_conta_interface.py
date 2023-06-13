@@ -8,10 +8,10 @@ class AtividadesContaInterface(ABC):
     def consultar_saldo(conta_corrente: ContaCorrente) -> float:
         pass
     @abstractmethod
-    def consultar_historico_movimento(conta_corrente: ContaCorrente) -> list:
+    def consultar_historico_movimento(conta_corrente: ContaCorrente) -> list[Movimento]:
         pass
     @abstractmethod
-    def realizar_transferencia(conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente) -> bool:
+    def realizar_transferencia(conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float) -> bool:
         pass
     @abstractmethod
     def depositar(conta_corrente: ContaCorrente, valor: float) -> Movimento:
