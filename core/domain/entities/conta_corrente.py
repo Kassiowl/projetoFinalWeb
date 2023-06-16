@@ -7,3 +7,4 @@ class ContaCorrente:
     nome: str
     data_abertura: str
     saldo: float
+    senha: str

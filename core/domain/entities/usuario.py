@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pessoa import Pessoa
+from .pessoa import Pessoa
 
 @dataclass
 class Usuario:

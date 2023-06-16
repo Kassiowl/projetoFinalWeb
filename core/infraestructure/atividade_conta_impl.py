@@ -5,8 +5,8 @@ from core.domain.repositories.atividades_conta_interface import AtividadesContaI
 import sqlite3
 
 class AtividadeContaImpl(AtividadesContaInterface):
-    def db_init(self):
-        self.con = sqlite3.connect("banco.db")
+    def __init__(self, nome_banco):
+        self.con = sqlite3.connect(nome_banco)
         self.cur = self.con.cursor()
 
     def __del__(self):
@@ -17,13 +17,13 @@ class AtividadeContaImpl(AtividadesContaInterface):
             query = f'SELECT saldo from contaCorrente WHERE numero = {conta_corrente.numero}'
             self.cur.execute(query)
             saldo = self.cur.fetchone()
-
+            saldo = saldo[0]
             if conta_corrente:
-                return saldo
+                return float(saldo)
             return None
         except:
             return None
-    def consultar_historico_movimento(conta_corrente: ContaCorrente) -> list[Movimento]:
+    def consultar_historico_movimento(self,conta_corrente: ContaCorrente) -> list[Movimento]:
         pass
     def realizar_transferencia(self,conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float):
         try:
@@ -40,26 +40,28 @@ class AtividadeContaImpl(AtividadesContaInterface):
         try:
             query =  f"UPDATE contaCorrente SET saldo = saldo + {valor} WHERE numero = {conta_corrente.numero}"
             self.cur.execute(query)
+            self.con.commit()
             return True
         except:
             return False
     def selecionar_conta_corrente(self,nome_conta: str):
         try:
-            query = f"SELECT * from contaCorrente WHERE nome = {nome_conta}"
+            query = f"SELECT * FROM contaCorrente WHERE nome = '{nome_conta}'"
             self.cur.execute(query)
             row = self.cur.fetchone()
-
             if row is not None:
                 numero = row[0]
                 nome = row[1]
                 data_abertura = row[2]
                 saldo = row[3]
-                conta = ContaCorrente(numero, nome, data_abertura, saldo)
+                senha = row[4]
+                conta = ContaCorrente(numero, nome, data_abertura, saldo,senha)
                 return conta
             
             return None
 
-        except:
+        except Exception as e:
+            print("exception",e)
             return None
     
 

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from conta_corrente import ContaCorrente
+from .conta_corrente import ContaCorrente
 
 @dataclass
 class Movimento:

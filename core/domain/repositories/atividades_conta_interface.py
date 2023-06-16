@@ -16,5 +16,6 @@ class AtividadesContaInterface(ABC):
     @abstractmethod
     def depositar(conta_corrente: ContaCorrente, valor: float) -> Movimento:
         pass
+    @abstractmethod
     def selecionar_conta_corrente(nome_conta: str) -> ContaCorrente:
         pass

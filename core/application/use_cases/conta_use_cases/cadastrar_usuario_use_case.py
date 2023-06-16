@@ -7,5 +7,5 @@ class CadastrarUsuarioUseCase():
     def __init__(self, conta_impl: ContaInterface):
         self.conta_impl = conta_impl
     
-    def run(self, usuario: Usuario):
-        return self.conta_impl.cadastrar_usuario(usuario)
+    def run(self, usuario: Usuario, senha: str):
+        return self.conta_impl.cadastrar_usuario(usuario, senha)

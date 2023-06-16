@@ -14,10 +14,13 @@ class ContaInterface(ABC):
     def cadastrar_pessoa(pessoa: Pessoa) -> bool:
         pass
     @abstractmethod
-    def cadastrar_usuario(usuario: Usuario) -> bool:
+    def cadastrar_usuario(usuario: Usuario, senha: str) -> bool:
         pass
     @abstractmethod
     def logar(usuario: Usuario, senha) -> bool:
+        pass
+    @abstractmethod
+    def cadastrar_conta_corrente(conta_corrente: ContaCorrente) -> bool:
         pass
 
     
