@@ -20,7 +20,7 @@ def test_conta():
     assert(cadastrar_usuario_use_case.run(usuario, '123') == True) 
 
     logar_use_case = LogarUseCase(conta_impl)
-    assert(logar_use_case.run(usuario, "123") == True)
+    assert(logar_use_case.run("Email@emailteste.com", "123") == True)
 
     del conta_impl
 
