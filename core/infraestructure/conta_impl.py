@@ -76,6 +76,8 @@ class ContaImpl(ContaInterface):
             return False
         
     def logar(self, email: str,senha: str):
+        print("email:",email),
+        print("senha:",senha)
         query = f"SELECT email, senha FROM usuario WHERE email = '{email}' AND senha = '{senha}'"
         self.cur.execute(query)
         user = self.cur.fetchone()
