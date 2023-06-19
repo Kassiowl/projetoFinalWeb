@@ -3,6 +3,7 @@ from core.domain.entities.conta_corrente import ContaCorrente
 from core.domain.entities.movimento import Movimento
 from core.domain.repositories.atividades_conta_interface import AtividadesContaInterface
 import sqlite3
+from datetime import date
 
 class AtividadeContaImpl(AtividadesContaInterface):
     def __init__(self, nome_banco):
@@ -24,14 +25,35 @@ class AtividadeContaImpl(AtividadesContaInterface):
         except:
             return None
     def consultar_historico_movimento(self,conta_corrente: ContaCorrente) -> list[Movimento]:
-        pass
-    def realizar_transferencia(self,conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float):
+        try:
+            query = f"SELECT * FROM movimento WHERE conta_corrente_origem = '{conta_corrente.numero}'"
+            self.cur.execute(query)
+            rows = self.cur.fetchall()
+            if rows is not None:
+                list_of_rows = []
+                for row in rows:
+                    movimento = Movimento(row[0], row[1], row[2], row[3], row[4], row[5])
+                    list_of_rows.append(movimento)
+                return list_of_rows
+            
+            return ["Nao foi encontrado nenhum historico"]
+        except Exception as e:
+            print(e)
+            return ["Algo deu errado na consulta de historico"]
+
+
+    def realizar_transferencia(self,conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, 
+                               quantidade: float, observacao="Nenhuma"):
         try:
             self.con.execute("BEGIN TRANSACTION")
             query1 = f"UPDATE contaCorrente SET saldo = saldo - {quantidade} WHERE numero = {conta_corrente_origem.numero}"
             query2 = f"UPDATE contaCorrente SET saldo = saldo + {quantidade} WHERE numero = {conta_corrente_destino.numero}"
+            hoje = date.today()
+            query3 = f"INSERT INTO movimento VALUES('transferencia', '{hoje}', '{quantidade}', \
+                    '{conta_corrente_origem.numero}', '{conta_corrente_destino.numero}', '{observacao}')"
             self.cur.execute(query1)
             self.cur.execute(query2)
+            self.cur.execute(query3)
             self.con.commit()
             return True
         except:
@@ -57,11 +79,8 @@ class AtividadeContaImpl(AtividadesContaInterface):
                 senha = row[4]
                 conta = ContaCorrente(numero, nome, data_abertura, saldo,senha)
                 return conta
-            
             return None
-
-        except Exception as e:
-            print("exception",e)
+        except:
             return None
     
 

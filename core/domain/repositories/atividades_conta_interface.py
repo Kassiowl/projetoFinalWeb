@@ -11,7 +11,7 @@ class AtividadesContaInterface(ABC):
     def consultar_historico_movimento(conta_corrente: ContaCorrente) -> list[Movimento]:
         pass
     @abstractmethod
-    def realizar_transferencia(conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float) -> bool:
+    def realizar_transferencia(conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float, observacao: str) -> bool:
         pass
     @abstractmethod
     def depositar(conta_corrente: ContaCorrente, valor: float) -> Movimento:
