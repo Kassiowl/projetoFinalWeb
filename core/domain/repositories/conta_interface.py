@@ -17,7 +17,7 @@ class ContaInterface(ABC):
     def cadastrar_usuario(usuario: Usuario, senha: str) -> bool:
         pass
     @abstractmethod
-    def logar(usuario: Usuario, senha) -> bool:
+    def logar(usuario: str, senha) -> bool:
         pass
     @abstractmethod
     def cadastrar_conta_corrente(conta_corrente: ContaCorrente) -> bool:
