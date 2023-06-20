@@ -28,3 +28,20 @@ class UsuarioCadastroParams(BaseModel):
 class LoginParams(BaseModel):
     email: str
     senha: str
+
+class ConsultarHistoricoOrSaldoParams(BaseModel):
+    numero_conta_corrente: int
+
+class DepositarParams(BaseModel):
+    numero_conta_corrente: int
+    valor: float
+
+class TransferenciaParams(BaseModel):
+    valor: float
+    observacao: str
+    conta_corrente_origem_num: int
+    conta_corrente_destino_num: int
+
+
+class SelecionarContaCorrenteParams(BaseModel):
+    conta_num: int

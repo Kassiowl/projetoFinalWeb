@@ -4,6 +4,11 @@ from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
 from fastapi import Depends, FastAPI
+from core.application.use_cases.atividade_conta_use_cases.consultar_historico_movimento_use_case import ConsultarHistoricoMovimentoUseCase
+from core.application.use_cases.atividade_conta_use_cases.consultar_saldo_conta_corrente_use_case import ConsultarSaldoContaCorrenteUseCase
+from core.application.use_cases.atividade_conta_use_cases.depositar_use_case_ import DepositarUseCase
+from core.application.use_cases.atividade_conta_use_cases.realizar_transferencia_use_case import RealizarTransferenciaUseCase
+from core.application.use_cases.atividade_conta_use_cases.selecionar_conta_corrente_use_case import SelecionarContaCorrenteUseCase
 
 from core.application.use_cases.conta_use_cases.cadastrar_conta_corrente import CadastrarContaCorrente
 from core.application.use_cases.conta_use_cases.cadastrar_conta_pessoa_use_case import CadastrarContaPessoaUseCase
@@ -12,13 +17,15 @@ from core.application.use_cases.conta_use_cases.logar_use_case import LogarUseCa
 from core.domain.entities.conta_corrente import ContaCorrente
 from core.domain.entities.pessoa import Pessoa
 from core.domain.entities.usuario import Usuario
+from core.infraestructure.atividade_conta_impl import AtividadeContaImpl
 from core.infraestructure.conta_impl import ContaImpl
 
 from fast_api.utils.create_token import create_access_token
-from fast_api.utils.params_models import ContaCadastroParams, PessoaCadastroParams, UsuarioCadastroParams, LoginParams
+from fast_api.utils.params_models import ConsultarHistoricoOrSaldoParams, ContaCadastroParams, DepositarParams, PessoaCadastroParams, SelecionarContaCorrenteParams, TransferenciaParams, UsuarioCadastroParams, LoginParams
 
 import random
 from datetime import datetime, timedelta
+import datetime
 
 app = FastAPI()
 
@@ -104,28 +111,73 @@ async def logar(login_data: LoginParams):
     )
     return{"token": token}
 
-
-
 @app.get("/consultar_historico_movimento")
-async def root():
-    return {"Projeto Web": "Api"}
+async def consultar_historico_movimento(conta: ConsultarHistoricoOrSaldoParams):
 
+    numero = conta.numero_conta_corrente
+    conta_corrente = ContaCorrente(numero, None, None, None, None)
+    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+    consultar_historico_movimento_use_case = ConsultarHistoricoMovimentoUseCase(atividade_conta_impl)
+    historico = consultar_historico_movimento_use_case.run(conta_corrente)
+    if(historico == ["Algo deu errado na consulta de historico"]):
+        raise HTTPException(status_code=500, detail="Algo deu errado na consulta de historico")
+    return{"historico": historico}
 
 @app.get("/consultar_saldo_conta_corrente")
-async def root():
-    return {"Projeto Web": "Api"}
+async def consultar_saldo_conta_corrente(conta: ConsultarHistoricoOrSaldoParams):
 
-@app.get("/depositar")
-async def root():
-    return {"Projeto Web": "Api"}
+    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+    conta_corrente_numero = conta.numero_conta_corrente
+    conta_corrente = ContaCorrente(conta_corrente_numero, None, None, None, None)
+    consultar_saldo_use_case = ConsultarSaldoContaCorrenteUseCase(atividade_conta_impl)
+    saldo = consultar_saldo_use_case.run(conta_corrente)
+    if(saldo is None):
+        raise HTTPException(status_code=500, detail="Algo deu errado na consulta de saldo")        
+    return {"Saldo": saldo}
 
-@app.get("/realizar_transferencia")
-async def root():
-    return {"Projeto Web": "Api"}
+@app.post("/depositar")
+async def depositar(deposito: DepositarParams):
+
+    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+    depositar_use_case = DepositarUseCase(atividade_conta_impl)
+    conta_corrente = ContaCorrente(deposito.numero_conta_corrente, None, None, None, None)
+    valor = deposito.valor
+    depositar = depositar_use_case.run(conta_corrente,valor)
+    if(depositar is None):
+        raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
+    return {"Depositar": depositar}
+
+@app.post("/realizar_transferencia")
+async def realizar_transferencia(transferencia: TransferenciaParams):
+
+    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+    realizar_transferencia_use_case = RealizarTransferenciaUseCase(atividade_conta_impl)
+
+    selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
+
+    conta_corrente_origem = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_origem_num)
+    conta_corrente_destino = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_destino_num)
+
+    valor = float(transferencia.valor)
+
+    observacao = transferencia.observacao
+    transferencia = realizar_transferencia_use_case.run(conta_corrente_origem, conta_corrente_destino, valor, observacao)
+
+    if(transferencia is False):
+        raise HTTPException(status_code=500, detail="Algo deu errado na transferência")
+    
+    return {"Transferencia": transferencia}
 
 @app.get("/selecionar_conta_corrente")
-async def root():
-    return {"Projeto Web": "Api"}
+async def selecionar_conta_corrente(selecionar: SelecionarContaCorrenteParams):
+    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+    selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
+    conta_corrente = selecionar_conta_corrente_use_case.run(selecionar.conta_num)
+
+    if(conta_corrente is None):
+        raise HTTPException(status_code=500, detail="Algo deu errado na seleção de conta")
+    
+    return {"conta_corrente": conta_corrente}
 
 
 

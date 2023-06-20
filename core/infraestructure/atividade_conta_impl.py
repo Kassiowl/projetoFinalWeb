@@ -66,9 +66,9 @@ class AtividadeContaImpl(AtividadesContaInterface):
             return True
         except:
             return False
-    def selecionar_conta_corrente(self,nome_conta: str):
+    def selecionar_conta_corrente(self,numero_conta: int):
         try:
-            query = f"SELECT * FROM contaCorrente WHERE nome = '{nome_conta}'"
+            query = f"SELECT * FROM contaCorrente WHERE numero = '{numero_conta}'"
             self.cur.execute(query)
             row = self.cur.fetchone()
             if row is not None:
