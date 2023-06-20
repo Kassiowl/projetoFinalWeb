@@ -38,7 +38,7 @@ class AtividadeContaImpl(AtividadesContaInterface):
             
             return ["Nao foi encontrado nenhum historico"]
         except Exception as e:
-            print(e)
+
             return ["Algo deu errado na consulta de historico"]
 
 

@@ -41,8 +41,6 @@ class ContaImpl(ContaInterface):
             self.con.commit()
             return True
         except Exception as e:
-            print("Exception___")
-            print(e)
             return False
 
     def cadastrar_pessoa(self, pessoa: Pessoa):
@@ -76,8 +74,6 @@ class ContaImpl(ContaInterface):
             return False
         
     def logar(self, email: str,senha: str):
-        print("email:",email),
-        print("senha:",senha)
         query = f"SELECT email, senha FROM usuario WHERE email = '{email}' AND senha = '{senha}'"
         self.cur.execute(query)
         user = self.cur.fetchone()

@@ -101,7 +101,6 @@ async def logar(login_data: LoginParams):
 
     logar_use_case = LogarUseCase(conta_impl)
     user_login = logar_use_case.run(usuario, senha)
-    print("user login",user_login)
     if(user_login is False):
         raise HTTPException(status_code=401, detail="Nao autenticado")
     
