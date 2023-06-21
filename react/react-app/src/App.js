@@ -1,12 +1,20 @@
+
 import logo from './logo.svg';
 import './App.css';
 import NavbarComponent from "./static/navbar"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import CadastrarContaCorrente from "./static/cadastrarcontacorrente"
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 function App() {
   return (
 
     <div className="App">
-        <NavbarComponent />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<NavbarComponent />}></Route>
+           <Route path="/cadastrarcontacorrente" element={ <CadastrarContaCorrente /> } />
+        </Routes>
+      </BrowserRouter>
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
