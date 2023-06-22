@@ -1,11 +1,24 @@
 
 import logo from './logo.svg';
 import './App.css';
-import NavbarComponent from "./static/navbar"
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CadastrarContaCorrente from "./static/cadastrarcontacorrente"
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
+
+import CadastrarContaCorrente from "./static/cadastrarcontacorrente"
+import NavbarComponent from "./static/navbar"
+import LoginPage from './static/login';
+
+import useToken from './login_token/useToken';
+
+
 function App() {
+  const { token, setToken } = useToken();
+  if(!token)
+  {
+    return <LoginPage setToken={setToken}/>
+  }
+
   return (
 
     <div className="App">
