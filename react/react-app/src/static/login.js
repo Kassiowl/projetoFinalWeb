@@ -35,7 +35,7 @@ function LoginBox( {  setToken  } )
     }
     catch(error)
     {
-      setErrorMessage("username or password is incorrect")
+      setErrorMessage("Nome de usuario ou senha incorreto")
     }
   }
     return(
@@ -54,7 +54,7 @@ function LoginBox( {  setToken  } )
                 <div className="pt-1 mb-4">
                 <button className="btn btn-success btn-lg btn-block" type="submit">Login</button>
                 </div>
-                <p >Don't have an account? <a href="#!" className="link-success">Registre-se</a></p>  
+                <p >Don't have an account? <a href="cadastrarcontausuario" className="link-success">Registre-se</a></p>  
                 <p className="text-danger">{    errorMessage   }</p>
             </form>
     )

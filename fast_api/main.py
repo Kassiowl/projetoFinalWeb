@@ -68,9 +68,9 @@ async def cadastrar_conta_corrente(conta: ContaCadastroParams):
 @app.post("/cadastrar_conta_pessoa", status_code=status.HTTP_201_CREATED)
 async def cadastrar_conta_pessoa(conta_pessoa: PessoaCadastroParams):
     nome = conta_pessoa.nome
-    cpf = conta_pessoa.cpf
+    cpf = int(conta_pessoa.cpf)
     data_nascimento = conta_pessoa.data_nascimento
-    telefone = conta_pessoa.telefone
+    telefone = int(conta_pessoa.telefone)
     endereco = conta_pessoa.endereco
     cep = conta_pessoa.cep
     pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep)
@@ -85,16 +85,15 @@ async def cadastrar_conta_pessoa(conta_pessoa: PessoaCadastroParams):
 
 @app.post("/cadastrar_usuario", status_code=status.HTTP_201_CREATED)
 async def cadastrar_usuario(usuario: UsuarioCadastroParams):
-
     nome = usuario.nome
-    cpf = usuario.cpf
+    cpf = int(usuario.cpf)
     data_nascimento = usuario.data_nascimento
-    telefone = usuario.telefone
+    telefone = int(usuario.telefone)
     endereco = usuario.endereco
     cep = usuario.cep
     senha = usuario.senha
-    pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep)  
 
+    pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep) 
     email = usuario.email
     usuario = Usuario(email, pessoa)
 

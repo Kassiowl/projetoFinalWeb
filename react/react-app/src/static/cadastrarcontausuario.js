@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
-async function cadastrarContaPessoa(credentials) {
-  return fetch('http://localhost:8000/cadastrar_conta_pessoa', {
+async function cadastrarContaUsuario(credentials) {
+  return fetch('http://localhost:8000/cadastrar_usuario', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -12,29 +12,35 @@ async function cadastrarContaPessoa(credentials) {
  }
 
 
-function CadastrarContaPessoa() {
+function CadastrarContaUsuario() {
 
   const [cadastro, setCadastro] = useState();
   const [errorMessage, setErrorMessage] = useState()
 
-  const [nome, setNome] = useState();
-  const [cpf, setCPF] = useState();
+  
+ 
+  const [email, setEmail] = useState();
+  const [senha, setSenha] = useState();
   const [data_nascimento, setDataNascimento] = useState();
   const [telefone, setTelefone] = useState();
   const [endereco, setEndereco] = useState();
   const [cep, setCep] = useState();
+  const [nome, setNome] = useState();
+  const[cpf, setCPF] = useState()
 
   const handleSubmit = async e => {
     e.preventDefault();
     try
     {
-      const cadastro = await cadastrarContaPessoa({
-        nome,
-        cpf,
+      const cadastro = await cadastrarContaUsuario({
+        email,
+        senha,
         data_nascimento,
         telefone,
         endereco,
-        cep
+        cep,
+        cpf,
+        nome
       });
       if(cadastro.stauts == 200){
         setCadastro("Cadastro realizado com sucesso")
@@ -50,15 +56,24 @@ function CadastrarContaPessoa() {
   }
 
   return (
-        <div className="container text-white">
+        <div className="container">
+            <h3>Cadastre-se</h3>
           <form onSubmit={handleSubmit}>
           <div class="form-group ">
-            <label for="Nome">Nome</label>
-            <input type="text" class="form-control" id="Nome" aria-describedby="Nome" placeholder="Enter email" onChange={ e => setNome(e.target.value)}/>
+            <label for="email">Email</label>
+            <input type="text" class="form-control" id="email" aria-describedby="Nome" placeholder="Email" onChange={ e => setEmail(e.target.value)}/>
+          </div>
+          <div class="form-group ">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" aria-describedby="Nome" placeholder="Nome" onChange={ e => setNome(e.target.value)}/>
+          </div>
+          <div class="form-group ">
+            <label for="CPF">CPF</label>
+            <input type="number" class="form-control" id="CPF" aria-describedby="Nome" placeholder="CPF" onChange={ e => setCPF(e.target.value)}/>
           </div>
           <div class="form-group mt-4">
-            <label for="CPF">CPF</label>
-            <input type="number" class="form-control" id="CPF" placeholder="CPF" onChange={ e => setCPF(e.target.value)}/>
+            <label for="senha">senha</label>
+            <input type="password" class="form-control" id="senha" placeholder="senha" onChange={ e => setSenha(e.target.value)}/>
           </div>
           <div class="form-group mt-4">
             <label for="DataNascimento">Data de nascimento</label>
@@ -85,4 +100,4 @@ function CadastrarContaPessoa() {
   );
 }
 
-export default CadastrarContaPessoa;
+export default CadastrarContaUsuario;

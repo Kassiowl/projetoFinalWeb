@@ -27,8 +27,11 @@ function CadastrarContaCorrente() {
         nome,
         senha
       });
-      if(cadastro){
+      if(cadastro.stauts == 200){
         setCadastro("Cadastro realizado com sucesso")
+      }
+      else{
+        setErrorMessage("Algo deu errado no servidor, tente novamente mais tarde")
       }
     }
     catch(error)

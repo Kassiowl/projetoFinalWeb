@@ -11,17 +11,24 @@ import LoginPage from './static/login';
 
 import useToken from './login_token/useToken';
 import CadastrarContaPessoa from './static/cadastrarcontapessoa';
-
+import CadastrarContaUsuario from "./static/cadastrarcontausuario"
 
 function App() {
   const { token, setToken } = useToken();
-  if(!token)
-  {
-    return <LoginPage setToken={setToken}/>
+  if (!token) {
+    return (
+      <div className="bg-white">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/cadastrarcontausuario" element={<CadastrarContaUsuario />} />
+            <Route path="/" element={<LoginPage setToken={setToken} />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    );
   }
 
   return (
-
     <div className="App bg-dark">
       <NavbarComponent />
       <BrowserRouter>
