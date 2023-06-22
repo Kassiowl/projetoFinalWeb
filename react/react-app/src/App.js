@@ -10,6 +10,7 @@ import NavbarComponent from "./static/navbar"
 import LoginPage from './static/login';
 
 import useToken from './login_token/useToken';
+import CadastrarContaPessoa from './static/cadastrarcontapessoa';
 
 
 function App() {
@@ -21,27 +22,15 @@ function App() {
 
   return (
 
-    <div className="App">
+    <div className="App bg-dark">
+      <NavbarComponent />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<NavbarComponent />}></Route>
            <Route path="/cadastrarcontacorrente" element={ <CadastrarContaCorrente /> } />
+           <Route path="/cadastrarcontapessoa" element={ <CadastrarContaPessoa /> } />
         </Routes>
       </BrowserRouter>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
     </div>
   );
 }
