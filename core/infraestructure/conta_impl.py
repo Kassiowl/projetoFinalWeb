@@ -7,7 +7,7 @@ from core.domain.repositories.conta_interface import ContaInterface
 class ContaImpl(ContaInterface):
     def __init__(self, db_name, already_created=False):
         self.db_name = db_name
-        self.con = sqlite3.connect(db_name)
+        self.con = sqlite3.connect(db_name, timeout=10.0)
         self.cur = self.con.cursor()
         if(not already_created):
             self.cur.execute("CREATE TABLE pessoa(cpf TEXT PRIMARY KEY, nome TEXT, data_nascimento DATE, telefone TEXT, endereco TEXT, cep TEXT)")

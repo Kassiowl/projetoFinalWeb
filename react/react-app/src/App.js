@@ -12,6 +12,7 @@ import LoginPage from './static/login';
 import useToken from './login_token/useToken';
 import CadastrarContaPessoa from './static/cadastrarcontapessoa';
 import CadastrarContaUsuario from "./static/cadastrarcontausuario"
+import Depositar from './static/depositar';
 
 function App() {
   const { token, setToken } = useToken();
@@ -35,6 +36,7 @@ function App() {
         <Routes>
            <Route path="/cadastrarcontacorrente" element={ <CadastrarContaCorrente /> } />
            <Route path="/cadastrarcontapessoa" element={ <CadastrarContaPessoa /> } />
+           <Route path="/depositar" element={ <Depositar /> } />
         </Routes>
       </BrowserRouter>
 

@@ -12,9 +12,13 @@ async function loginUser(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
- }
-
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    });
+}
 function LoginBox( {  setToken  } )
 {
   

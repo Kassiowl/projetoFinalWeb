@@ -8,7 +8,12 @@ async function cadastrarContaCorrente(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
+    .then(data => {
+      if(!data.ok){
+        throw new Error(data.status)
+      }
+      return data
+    })
  }
 
 
@@ -23,16 +28,12 @@ function CadastrarContaCorrente() {
     e.preventDefault();
     try
     {
-      const cadastro = await cadastrarContaCorrente({
+      const cadastro_req = await cadastrarContaCorrente({
         nome,
         senha
-      });
-      if(cadastro.stauts == 200){
-        setCadastro("Cadastro realizado com sucesso")
-      }
-      else{
-        setErrorMessage("Algo deu errado no servidor, tente novamente mais tarde")
-      }
+      })
+
+      setCadastro("Cadastro realizado com sucesso")
     }
     catch(error)
     {
@@ -44,7 +45,7 @@ function CadastrarContaCorrente() {
           <form onSubmit={handleSubmit}>
           <div class="form-group ">
             <label for="nomedaconta">Nome da conta</label>
-            <input type="text" class="form-control" id="nomedaconta" aria-describedby="emailHelp" placeholder="Enter email" onChange={ e => setNome(e.target.value)}/>
+            <input type="text" class="form-control" id="nomedaconta" aria-describedby="emailHelp" placeholder="Nome da conta" onChange={ e => setNome(e.target.value)}/>
           </div>
           <div class="form-group mt-4">
             <label for="senha">Senha</label>

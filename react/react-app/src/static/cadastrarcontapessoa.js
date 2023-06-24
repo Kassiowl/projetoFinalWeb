@@ -8,7 +8,12 @@ async function cadastrarContaPessoa(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
+    .then(data => {
+      if(data.ok){
+        return data
+      }
+      throw new Error(data.status)
+    })
  }
 
 
@@ -28,7 +33,7 @@ function CadastrarContaPessoa() {
     e.preventDefault();
     try
     {
-      const cadastro = await cadastrarContaPessoa({
+      const cadastro_req = await cadastrarContaPessoa({
         nome,
         cpf,
         data_nascimento,
@@ -36,12 +41,8 @@ function CadastrarContaPessoa() {
         endereco,
         cep
       });
-      if(cadastro.stauts == 200){
-        setCadastro("Cadastro realizado com sucesso")
-      }
-      else{
-        setErrorMessage("Algo deu errado no servidor, tente novamente mais tarde")
-      }
+
+      setCadastro("Cadastro realizado com sucesso")
     }
     catch(error)
     {

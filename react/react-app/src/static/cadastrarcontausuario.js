@@ -8,7 +8,14 @@ async function cadastrarContaUsuario(credentials) {
     },
     body: JSON.stringify(credentials)
   })
-    .then(data => data.json())
+    .then(data => {
+      if(data.ok){
+        return data
+      }
+      else{
+        throw new Error(data.status)
+      }
+    })
  }
 
 
@@ -42,12 +49,9 @@ function CadastrarContaUsuario() {
         cpf,
         nome
       });
-      if(cadastro.stauts == 200){
-        setCadastro("Cadastro realizado com sucesso")
-      }
-      else{
-        setErrorMessage("Algo deu errado no servidor, tente novamente mais tarde")
-      }
+
+      setCadastro("Cadastro realizado com sucesso")
+
     }
     catch(error)
     {

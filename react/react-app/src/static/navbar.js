@@ -14,7 +14,7 @@ function NavbarComponent() {
             <Nav.Link href="cadastrarcontapessoa">Cadastrar conta pessoa</Nav.Link>
             <Nav.Link href="#link">Consultar historico</Nav.Link>
             <Nav.Link href="#link">consultar saldo conta corrente</Nav.Link>
-            <Nav.Link href="#link">Depositar</Nav.Link>
+            <Nav.Link href="depositar">Depositar</Nav.Link>
             <Nav.Link href="#link">Realizar transferencia</Nav.Link>
           </Nav>
         </Navbar.Collapse>

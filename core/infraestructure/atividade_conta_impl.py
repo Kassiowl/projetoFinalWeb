@@ -7,7 +7,7 @@ from datetime import date
 
 class AtividadeContaImpl(AtividadesContaInterface):
     def __init__(self, nome_banco):
-        self.con = sqlite3.connect(nome_banco)
+        self.con = sqlite3.connect(nome_banco, timeout=10.0)
         self.cur = self.con.cursor()
 
     def __del__(self):

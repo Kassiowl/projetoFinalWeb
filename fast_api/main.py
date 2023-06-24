@@ -1,6 +1,7 @@
 
 from fastapi import FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
+
 from fastapi import FastAPI
 from core.application.use_cases.atividade_conta_use_cases.consultar_historico_movimento_use_case import ConsultarHistoricoMovimentoUseCase
 from core.application.use_cases.atividade_conta_use_cases.consultar_saldo_conta_corrente_use_case import ConsultarSaldoContaCorrenteUseCase
@@ -76,14 +77,15 @@ async def cadastrar_conta_pessoa(conta_pessoa: PessoaCadastroParams):
         endereco = conta_pessoa.endereco
         cep = conta_pessoa.cep
         pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep)
-
+        print(pessoa)
         conta_impl = ContaImpl('contaDb.db',True)
         cadastrar_conta_pessoa_use_case = CadastrarContaPessoaUseCase(conta_impl)
         pessoa_foi_cadastrada = cadastrar_conta_pessoa_use_case.run(pessoa)
+        del conta_impl
         if(pessoa_foi_cadastrada is False):
             raise HTTPException(status_code=500, detail="Falha ao cadastrar pessoa")
         return {"pessoa_cadastrada": pessoa_foi_cadastrada}
-    except:
+    except Exception as e:
         raise HTTPException(status_code=500, detail="Falha ao cadastrar pessoa")
 
 
@@ -167,8 +169,8 @@ async def depositar(deposito: DepositarParams):
     try:
         atividade_conta_impl = AtividadeContaImpl('contaDb.db')
         depositar_use_case = DepositarUseCase(atividade_conta_impl)
-        conta_corrente = ContaCorrente(deposito.numero_conta_corrente, None, None, None, None)
-        valor = deposito.valor
+        conta_corrente = ContaCorrente(int(deposito.numero_conta_corrente), None, None, None)
+        valor = float(deposito.valor)
         depositar = depositar_use_case.run(conta_corrente,valor)
         if(depositar is None):
             raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
