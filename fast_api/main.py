@@ -165,17 +165,19 @@ async def consultar_saldo_conta_corrente(conta: ConsultarHistoricoOrSaldoParams)
 
 @app.post("/depositar")
 async def depositar(deposito: DepositarParams):
-
+  
     try:
+        print("dsadsa")
         atividade_conta_impl = AtividadeContaImpl('contaDb.db')
         depositar_use_case = DepositarUseCase(atividade_conta_impl)
-        conta_corrente = ContaCorrente(int(deposito.numero_conta_corrente), None, None, None)
-        valor = float(deposito.valor)
-        depositar = depositar_use_case.run(conta_corrente,valor)
-        if(depositar is None):
+        conta_corrente = ContaCorrente(int(deposito.numero_conta_corrente), None, None, None,None)
+        depositar = depositar_use_case.run(conta_corrente,float(deposito.valor))
+        print(depositar)
+        if(depositar is False):
             raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
         return {"Depositar": depositar}
-    except:
+    except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
 
 

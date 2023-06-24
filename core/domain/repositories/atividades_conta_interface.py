@@ -14,7 +14,7 @@ class AtividadesContaInterface(ABC):
     def realizar_transferencia(conta_corrente_origem: ContaCorrente,conta_corrente_destino: ContaCorrente, quantidade: float, observacao: str) -> bool:
         pass
     @abstractmethod
-    def depositar(conta_corrente: ContaCorrente, valor: float) -> Movimento:
+    def depositar(conta_corrente: ContaCorrente, valor: float) -> bool:
         pass
     @abstractmethod
     def selecionar_conta_corrente(numero_conta: int) -> ContaCorrente:
