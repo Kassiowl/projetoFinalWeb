@@ -1,9 +1,7 @@
 
 from fastapi import FastAPI, HTTPException, status
-from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer
-from typing import Annotated
-from fastapi import Depends, FastAPI
+from fastapi import FastAPI
 from core.application.use_cases.atividade_conta_use_cases.consultar_historico_movimento_use_case import ConsultarHistoricoMovimentoUseCase
 from core.application.use_cases.atividade_conta_use_cases.consultar_saldo_conta_corrente_use_case import ConsultarSaldoContaCorrenteUseCase
 from core.application.use_cases.atividade_conta_use_cases.depositar_use_case_ import DepositarUseCase
