@@ -54,143 +54,168 @@ async def root():
 
 @app.post("/cadastrar_conta_corrente/", status_code=status.HTTP_201_CREATED)
 async def cadastrar_conta_corrente(conta: ContaCadastroParams):
-    conta_corrente_random_number = random.randint(1, 5000000000)
-    conta_corrente = ContaCorrente(
-                    conta_corrente_random_number, conta.nome, datetime.date.today(), 0, conta.senha)
-    conta_impl = ContaImpl('contaDb.db',True)
-    cadastrar_conta_corrente_use_case = CadastrarContaCorrente(conta_impl)
-    conta_foi_cadastrada = cadastrar_conta_corrente_use_case.run(conta_corrente)
-    if(conta_foi_cadastrada is False):
+    try:
+        conta_corrente_random_number = random.randint(1, 5000000000)
+        conta_corrente = ContaCorrente(
+                        conta_corrente_random_number, conta.nome, datetime.date.today(), 0, conta.senha)
+        conta_impl = ContaImpl('contaDb.db',True)
+        cadastrar_conta_corrente_use_case = CadastrarContaCorrente(conta_impl)
+        conta_foi_cadastrada = cadastrar_conta_corrente_use_case.run(conta_corrente)
+        if(conta_foi_cadastrada is False):
+            raise HTTPException(status_code=500, detail="Falha ao cadastrar a conta corrente")
+        return{"cadastro":conta_foi_cadastrada}
+    except:
         raise HTTPException(status_code=500, detail="Falha ao cadastrar a conta corrente")
-    return{"cadastro":conta_foi_cadastrada}
 
 
 @app.post("/cadastrar_conta_pessoa", status_code=status.HTTP_201_CREATED)
 async def cadastrar_conta_pessoa(conta_pessoa: PessoaCadastroParams):
-    nome = conta_pessoa.nome
-    cpf = int(conta_pessoa.cpf)
-    data_nascimento = conta_pessoa.data_nascimento
-    telefone = int(conta_pessoa.telefone)
-    endereco = conta_pessoa.endereco
-    cep = conta_pessoa.cep
-    pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep)
+    try:
+        nome = conta_pessoa.nome
+        cpf = int(conta_pessoa.cpf)
+        data_nascimento = conta_pessoa.data_nascimento
+        telefone = int(conta_pessoa.telefone)
+        endereco = conta_pessoa.endereco
+        cep = conta_pessoa.cep
+        pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep)
 
-    conta_impl = ContaImpl('contaDb.db',True)
-    cadastrar_conta_pessoa_use_case = CadastrarContaPessoaUseCase(conta_impl)
-    pessoa_foi_cadastrada = cadastrar_conta_pessoa_use_case.run(pessoa)
-    if(pessoa_foi_cadastrada is False):
+        conta_impl = ContaImpl('contaDb.db',True)
+        cadastrar_conta_pessoa_use_case = CadastrarContaPessoaUseCase(conta_impl)
+        pessoa_foi_cadastrada = cadastrar_conta_pessoa_use_case.run(pessoa)
+        if(pessoa_foi_cadastrada is False):
+            raise HTTPException(status_code=500, detail="Falha ao cadastrar pessoa")
+        return {"pessoa_cadastrada": pessoa_foi_cadastrada}
+    except:
         raise HTTPException(status_code=500, detail="Falha ao cadastrar pessoa")
-    return {"pessoa_cadastrada": pessoa_foi_cadastrada}
 
 
 @app.post("/cadastrar_usuario", status_code=status.HTTP_201_CREATED)
 async def cadastrar_usuario(usuario: UsuarioCadastroParams):
-    nome = usuario.nome
-    cpf = int(usuario.cpf)
-    data_nascimento = usuario.data_nascimento
-    telefone = int(usuario.telefone)
-    endereco = usuario.endereco
-    cep = usuario.cep
-    senha = usuario.senha
+    try:
+        nome = usuario.nome
+        cpf = int(usuario.cpf)
+        data_nascimento = usuario.data_nascimento
+        telefone = int(usuario.telefone)
+        endereco = usuario.endereco
+        cep = usuario.cep
+        senha = usuario.senha
 
-    pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep) 
-    email = usuario.email
-    usuario = Usuario(email, pessoa)
+        pessoa = Pessoa(nome, cpf, data_nascimento, telefone, endereco, cep) 
+        email = usuario.email
+        usuario = Usuario(email, pessoa)
 
-    conta_impl = ContaImpl('contaDb.db',True)
-    cadastrar_usuario_use_case = CadastrarUsuarioUseCase(conta_impl)
-    usuario_foi_cadastrado = cadastrar_usuario_use_case.run(usuario, senha)
-    if(usuario_foi_cadastrado is False):
+        conta_impl = ContaImpl('contaDb.db',True)
+        cadastrar_usuario_use_case = CadastrarUsuarioUseCase(conta_impl)
+        usuario_foi_cadastrado = cadastrar_usuario_use_case.run(usuario, senha)
+        if(usuario_foi_cadastrado is False):
+            raise HTTPException(status_code=500, detail="Falha ao cadastrar usuario")
+        return {"usuario_cadastrado", usuario_foi_cadastrado}
+    except:
         raise HTTPException(status_code=500, detail="Falha ao cadastrar usuario")
-    return {"usuario_cadastrado", usuario_foi_cadastrado}
 
 
 @app.post("/logar",status_code=status.HTTP_200_OK)
 async def logar(login_data: LoginParams):
-    conta_impl = ContaImpl("contaDb.db", True)
+    try:
+        conta_impl = ContaImpl("contaDb.db", True)
+        
+        usuario = login_data.email
+        senha = login_data.senha
 
-    
-    usuario = login_data.email
-    senha = login_data.senha
-
-    logar_use_case = LogarUseCase(conta_impl)
-    user_login = logar_use_case.run(usuario, senha)
-    if(user_login is False):
-        raise HTTPException(status_code=401, detail="Nao autenticado")
-    
-    access_token_expires = timedelta(minutes=300)
-    token = create_access_token(
-        data={"sub": usuario}, expires_delta=access_token_expires
-    )
-    return{"token": token}
+        logar_use_case = LogarUseCase(conta_impl)
+        user_login = logar_use_case.run(usuario, senha)
+        if(user_login is False):
+            raise HTTPException(status_code=401, detail="Nao autenticado")
+        
+        access_token_expires = timedelta(minutes=300)
+        token = create_access_token(
+            data={"sub": usuario}, expires_delta=access_token_expires
+        )
+        return{"token": token}
+    except:
+        raise HTTPException(status_code=500, detail="Erro interno ao logar")
 
 @app.get("/consultar_historico_movimento")
 async def consultar_historico_movimento(conta: ConsultarHistoricoOrSaldoParams):
-
-    numero = conta.numero_conta_corrente
-    conta_corrente = ContaCorrente(numero, None, None, None, None)
-    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-    consultar_historico_movimento_use_case = ConsultarHistoricoMovimentoUseCase(atividade_conta_impl)
-    historico = consultar_historico_movimento_use_case.run(conta_corrente)
-    if(historico == ["Algo deu errado na consulta de historico"]):
+    try:
+        numero = conta.numero_conta_corrente
+        conta_corrente = ContaCorrente(numero, None, None, None, None)
+        atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+        consultar_historico_movimento_use_case = ConsultarHistoricoMovimentoUseCase(atividade_conta_impl)
+        historico = consultar_historico_movimento_use_case.run(conta_corrente)
+        if(historico == ["Algo deu errado na consulta de historico"]):
+            raise HTTPException(status_code=500, detail="Algo deu errado na consulta de historico")
+        return{"historico": historico}
+    except:
         raise HTTPException(status_code=500, detail="Algo deu errado na consulta de historico")
-    return{"historico": historico}
 
 @app.get("/consultar_saldo_conta_corrente")
 async def consultar_saldo_conta_corrente(conta: ConsultarHistoricoOrSaldoParams):
-
-    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-    conta_corrente_numero = conta.numero_conta_corrente
-    conta_corrente = ContaCorrente(conta_corrente_numero, None, None, None, None)
-    consultar_saldo_use_case = ConsultarSaldoContaCorrenteUseCase(atividade_conta_impl)
-    saldo = consultar_saldo_use_case.run(conta_corrente)
-    if(saldo is None):
-        raise HTTPException(status_code=500, detail="Algo deu errado na consulta de saldo")        
-    return {"Saldo": saldo}
+    try:
+        atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+        conta_corrente_numero = conta.numero_conta_corrente
+        conta_corrente = ContaCorrente(conta_corrente_numero, None, None, None, None)
+        consultar_saldo_use_case = ConsultarSaldoContaCorrenteUseCase(atividade_conta_impl)
+        saldo = consultar_saldo_use_case.run(conta_corrente)
+        if(saldo is None):
+            raise HTTPException(status_code=500, detail="Algo deu errado na consulta de saldo")        
+        return {"Saldo": saldo}
+    except:
+        raise HTTPException(status_code=500, detail="Algo deu errado na consulta de saldo")    
 
 @app.post("/depositar")
 async def depositar(deposito: DepositarParams):
 
-    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-    depositar_use_case = DepositarUseCase(atividade_conta_impl)
-    conta_corrente = ContaCorrente(deposito.numero_conta_corrente, None, None, None, None)
-    valor = deposito.valor
-    depositar = depositar_use_case.run(conta_corrente,valor)
-    if(depositar is None):
+    try:
+        atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+        depositar_use_case = DepositarUseCase(atividade_conta_impl)
+        conta_corrente = ContaCorrente(deposito.numero_conta_corrente, None, None, None, None)
+        valor = deposito.valor
+        depositar = depositar_use_case.run(conta_corrente,valor)
+        if(depositar is None):
+            raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
+        return {"Depositar": depositar}
+    except:
         raise HTTPException(status_code=500, detail="Algo deu errado no deposito")
-    return {"Depositar": depositar}
+
 
 @app.post("/realizar_transferencia")
 async def realizar_transferencia(transferencia: TransferenciaParams):
 
-    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-    realizar_transferencia_use_case = RealizarTransferenciaUseCase(atividade_conta_impl)
+    try:
+        atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+        realizar_transferencia_use_case = RealizarTransferenciaUseCase(atividade_conta_impl)
 
-    selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
+        selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
 
-    conta_corrente_origem = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_origem_num)
-    conta_corrente_destino = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_destino_num)
+        conta_corrente_origem = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_origem_num)
+        conta_corrente_destino = selecionar_conta_corrente_use_case.run(transferencia.conta_corrente_destino_num)
 
-    valor = float(transferencia.valor)
+        valor = float(transferencia.valor)
 
-    observacao = transferencia.observacao
-    transferencia = realizar_transferencia_use_case.run(conta_corrente_origem, conta_corrente_destino, valor, observacao)
+        observacao = transferencia.observacao
+        transferencia = realizar_transferencia_use_case.run(conta_corrente_origem, conta_corrente_destino, valor, observacao)
 
-    if(transferencia is False):
+        if(transferencia is False):
+            raise HTTPException(status_code=500, detail="Algo deu errado na transferência")
+        
+        return {"Transferencia": transferencia}
+    except:
         raise HTTPException(status_code=500, detail="Algo deu errado na transferência")
-    
-    return {"Transferencia": transferencia}
 
 @app.get("/selecionar_conta_corrente")
 async def selecionar_conta_corrente(selecionar: SelecionarContaCorrenteParams):
-    atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-    selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
-    conta_corrente = selecionar_conta_corrente_use_case.run(selecionar.conta_num)
+    try:
+        atividade_conta_impl = AtividadeContaImpl('contaDb.db')
+        selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
+        conta_corrente = selecionar_conta_corrente_use_case.run(selecionar.conta_num)
 
-    if(conta_corrente is None):
+        if(conta_corrente is None):
+            raise HTTPException(status_code=500, detail="Algo deu errado na seleção de conta")
+        
+        return {"conta_corrente": conta_corrente}
+    except:
         raise HTTPException(status_code=500, detail="Algo deu errado na seleção de conta")
-    
-    return {"conta_corrente": conta_corrente}
 
 
 
