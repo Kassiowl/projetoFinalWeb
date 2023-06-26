@@ -11,8 +11,6 @@ async function consultarcontacorrente(numero_conta_corrente) {
   })
     .then(data => {
       if(data.ok){
-        console.log("data")
-        console.log(data)
         return data.json()
       }
       else{

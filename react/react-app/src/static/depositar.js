@@ -45,7 +45,7 @@ function Depositar() {
         <div className="container text-white">
           <form onSubmit={handleSubmit}>
           <div class="form-group ">
-            <label for="numero">Numero</label>
+            <label for="numero">Numero da conta corrente</label>
             <input type="text" class="form-control" id="numero" placeholder="Numero" onChange={ e => setNumero(e.target.value)}/>
           </div>
           <div class="form-group mt-4">

@@ -13,6 +13,7 @@ import CadastrarContaPessoa from './static/cadastrarcontapessoa';
 import CadastrarContaUsuario from "./static/cadastrarcontausuario"
 import Depositar from './static/depositar';
 import ConsultarSaldoContaCorrente from './static/consultarsaldocontacorrente';
+import RealizarTransferencia from './static/realizar_transferencia';
 
 function App() {
   const { token, setToken } = useToken();
@@ -38,6 +39,7 @@ function App() {
            <Route path="/cadastrarcontapessoa" element={ <CadastrarContaPessoa /> } />
            <Route path="/depositar" element={ <Depositar /> } />
            <Route path="/consultarsaldo" element={ <ConsultarSaldoContaCorrente /> } />
+           <Route path="/realizartransferencia" element={ <RealizarTransferencia/> }></Route>
         </Routes>
       </BrowserRouter>
 
