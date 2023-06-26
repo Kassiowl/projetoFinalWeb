@@ -77,7 +77,6 @@ function RealizarTransferencia() {
           <button className="btn btn-primary" type="submit">Realizar transferencia</button>
           </form>
           <h4 className="text-success">{transferencia}</h4>
-          <h2>{transferencia}</h2>
           <h2 className="text-danger">{errorMessage}</h2>
         </div>
    
