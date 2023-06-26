@@ -38,9 +38,9 @@ function ConsultarSaldoContaCorrente() {
       const consultarsaldocontacorrente = await consultarcontacorrente({
         numero_conta_corrente
       });
-      console.log(consultarsaldocontacorrente.Saldo)
+
       setSaldoAtual(consultarsaldocontacorrente.Saldo)
-      setConsulta("Cadastro realizado com sucesso")
+      setConsulta("Consulta realizada com sucesso")
 
     }
     catch(error)
@@ -60,7 +60,9 @@ function ConsultarSaldoContaCorrente() {
           </div>
           <button className="btn btn-primary" type="submit">Consultar saldo</button>
           </form>
+          <h4 className="text-success">{consulta}</h4>
           <h2>Saldo atual: {saldo}</h2>
+          <h2 className="text-danger">{errorMessage}</h2>
         </div>
    
   );

@@ -19,7 +19,7 @@ async function depositar(credentials) {
 
 function Depositar() {
 
-  const [cadastro, setCadastro] = useState();
+  const [deposito, setDeposito] = useState();
   const [errorMessage, setErrorMessage] = useState()
 
   const [numero_conta_corrente, setNumero] = useState();
@@ -34,7 +34,7 @@ function Depositar() {
         valor
       })
 
-      setCadastro("Cadastro realizado com sucesso")
+      setDeposito("Deposito realizado com sucesso")
     }
     catch(error)
     {
@@ -55,7 +55,7 @@ function Depositar() {
           <button type="submit" class="btn btn-primary">Depositar</button>
           </form>
           <p className="text-danger">{    errorMessage   }</p>
-          <p className="text-success">{ cadastro  }</p>
+          <p className="text-success">{ deposito  }</p>
         </div>
    
   );
