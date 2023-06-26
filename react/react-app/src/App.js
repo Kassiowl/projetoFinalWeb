@@ -1,5 +1,4 @@
 
-import logo from './logo.svg';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -13,6 +12,7 @@ import useToken from './login_token/useToken';
 import CadastrarContaPessoa from './static/cadastrarcontapessoa';
 import CadastrarContaUsuario from "./static/cadastrarcontausuario"
 import Depositar from './static/depositar';
+import ConsultarSaldoContaCorrente from './static/consultarsaldocontacorrente';
 
 function App() {
   const { token, setToken } = useToken();
@@ -37,6 +37,7 @@ function App() {
            <Route path="/cadastrarcontacorrente" element={ <CadastrarContaCorrente /> } />
            <Route path="/cadastrarcontapessoa" element={ <CadastrarContaPessoa /> } />
            <Route path="/depositar" element={ <Depositar /> } />
+           <Route path="/consultarsaldo" element={ <ConsultarSaldoContaCorrente /> } />
         </Routes>
       </BrowserRouter>
 

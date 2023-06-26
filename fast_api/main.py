@@ -149,11 +149,11 @@ async def consultar_historico_movimento(conta: ConsultarHistoricoOrSaldoParams):
     except:
         raise HTTPException(status_code=500, detail="Algo deu errado na consulta de historico")
 
-@app.get("/consultar_saldo_conta_corrente")
+@app.post("/consultar_saldo_conta_corrente")
 async def consultar_saldo_conta_corrente(conta: ConsultarHistoricoOrSaldoParams):
     try:
         atividade_conta_impl = AtividadeContaImpl('contaDb.db')
-        conta_corrente_numero = conta.numero_conta_corrente
+        conta_corrente_numero = int(conta.numero_conta_corrente)
         conta_corrente = ContaCorrente(conta_corrente_numero, None, None, None, None)
         consultar_saldo_use_case = ConsultarSaldoContaCorrenteUseCase(atividade_conta_impl)
         saldo = consultar_saldo_use_case.run(conta_corrente)
