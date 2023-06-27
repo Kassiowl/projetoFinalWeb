@@ -12,7 +12,7 @@ async function cadastrarContaCorrente(credentials) {
       if(!data.ok){
         throw new Error(data.status)
       }
-      return data
+      return data.json()
     })
  }
 
@@ -24,6 +24,9 @@ function CadastrarContaCorrente() {
 
   const [nome, setNome] = useState();
   const [senha, setSenha] = useState();
+
+  const [numeroConta, setNumeroConta] = useState();
+
   const handleSubmit = async e => {
     e.preventDefault();
     try
@@ -34,6 +37,9 @@ function CadastrarContaCorrente() {
       })
 
       setCadastro("Cadastro realizado com sucesso")
+      console.log("cadastro req")
+      console.log(cadastro_req.numero_conta)
+      setNumeroConta("O numero da sua conta é   -   " + cadastro_req.numero_conta)
     }
     catch(error)
     {
@@ -55,6 +61,7 @@ function CadastrarContaCorrente() {
           </form>
           <p className="text-danger">{    errorMessage   }</p>
           <p className="text-success">{ cadastro  }</p>
+          <p className="text-info">{numeroConta}</p>
         </div>
    
   );
