@@ -62,7 +62,7 @@ async def cadastrar_conta_corrente(conta: ContaCadastroParams):
         conta_foi_cadastrada = cadastrar_conta_corrente_use_case.run(conta_corrente)
         if(conta_foi_cadastrada is False):
             raise HTTPException(status_code=500, detail="Falha ao cadastrar a conta corrente")
-        return{"cadastro":conta_foi_cadastrada}
+        return{"cadastro":conta_foi_cadastrada, "numero_conta": conta_corrente_random_number}
     except:
         raise HTTPException(status_code=500, detail="Falha ao cadastrar a conta corrente")
 
@@ -135,7 +135,7 @@ async def logar(login_data: LoginParams):
     except:
         raise HTTPException(status_code=500, detail="Erro interno ao logar")
 
-@app.get("/consultar_historico_movimento")
+@app.post("/consultar_historico_movimento")
 async def consultar_historico_movimento(conta: ConsultarHistoricoOrSaldoParams):
     try:
         numero = conta.numero_conta_corrente
@@ -219,6 +219,13 @@ async def selecionar_conta_corrente(selecionar: SelecionarContaCorrenteParams):
     except:
         raise HTTPException(status_code=500, detail="Algo deu errado na seleção de conta")
 
+
+@app.get("selecionar_todas_contas_correntes")
+async def selecionar_todas_contas_correntes():
+    try:
+        pass
+    except:
+        raise HTTPException(status_code=500, detail="Não foi possível selecionar todas as contas correntes")
 
 
 
