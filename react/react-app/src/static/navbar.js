@@ -12,7 +12,7 @@ function NavbarComponent() {
           <Nav className="me-auto">
             <Nav.Link href="cadastrarcontacorrente">Cadastrar conta corrente</Nav.Link>
             <Nav.Link href="cadastrarcontapessoa">Cadastrar conta pessoa</Nav.Link>
-            <Nav.Link href="#link">Consultar historico</Nav.Link>
+            <Nav.Link href="consultarhistorico">Consultar historico</Nav.Link>
             <Nav.Link href="consultarsaldo">consultar saldo conta corrente</Nav.Link>
             <Nav.Link href="depositar">Depositar</Nav.Link>
             <Nav.Link href="realizartransferencia">Realizar transferencia</Nav.Link>
