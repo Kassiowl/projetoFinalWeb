@@ -49,7 +49,9 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return {"Projeto Web": "Api"}
+    conta_impl = ContaImpl('contaDb.db', False)
+
+    return {"Banco de dados": "Criado"}
 
 @app.post("/cadastrar_conta_corrente/", status_code=status.HTTP_201_CREATED)
 async def cadastrar_conta_corrente(conta: ContaCadastroParams):
