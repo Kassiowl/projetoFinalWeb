@@ -44,5 +44,5 @@ def test_atividade_conta():
 
 
     selecionar_conta_corrente_use_case = SelecionarContaCorrenteUseCase(atividade_conta_impl)
-    assert(selecionar_conta_corrente_use_case.run(conta_corrente_mock.nome) == conta_corrente_mock)
+    assert(selecionar_conta_corrente_use_case.run(conta_corrente_mock.numero) == conta_corrente_mock)
     
