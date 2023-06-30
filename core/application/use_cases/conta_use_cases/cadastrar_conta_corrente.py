@@ -12,3 +12,4 @@ class CadastrarContaCorrente():
         if(conta_corrente.saldo > 0):
             raise NovaContaCorrenteNaoPodeTerSaldoMaiorQueZero(conta_corrente.saldo)
         return self.conta_impl.cadastrar_conta_corrente(conta_corrente)
+        
